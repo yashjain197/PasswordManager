@@ -7,12 +7,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toolbar;
 
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
 import com.google.firebase.auth.FirebaseAuth;
-import com.passwordmanager.passwordmanager.MainActivity;
+import com.passwordmanager.passwordmanager.MainScreen.MainActivity;
 import com.passwordmanager.passwordmanager.R;
 import com.passwordmanager.passwordmanager.databinding.ActivityLoginOtpBinding;
 

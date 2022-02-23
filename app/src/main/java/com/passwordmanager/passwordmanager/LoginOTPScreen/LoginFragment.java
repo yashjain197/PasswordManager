@@ -1,14 +1,11 @@
 package com.passwordmanager.passwordmanager.LoginOTPScreen;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,15 +21,12 @@ import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
-import com.passwordmanager.passwordmanager.MainActivity;
 import com.passwordmanager.passwordmanager.ProgressBar.ProgressBar;
 import com.passwordmanager.passwordmanager.R;
 
 import java.util.concurrent.TimeUnit;
-import com.google.firebase.auth.PhoneAuthCredential;
+
 import com.google.firebase.auth.PhoneAuthOptions;
-import com.google.firebase.auth.PhoneAuthProvider;
-import java.util.zip.Inflater;
 
 /**
  * A simple {@link Fragment} subclass.
