@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Maintext" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">#FFFFF7</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <style name="toolbar" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/hint</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">@font/pacificoregular</item>
+
+    </style><style name="hint" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">#D3D3D3</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+</resources>
