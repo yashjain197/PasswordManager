@@ -12,9 +12,10 @@
         <entry key="app/src/main/res/drawable/splash_background.xml" value="0.1875" />
         <entry key="app/src/main/res/drawable/textbox_outline.xml" value="0.1875" />
         <entry key="app/src/main/res/font/fonts.xml" value="0.2015625" />
+        <entry key="app/src/main/res/layout/activity_add_pasword_data.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_login_otp.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="1.1" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_progress_bar.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_splash_screen.xml" value="0.16" />
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.25" />

@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PasswordManager">
         <activity
+            android:name=".AddDataScreen.AddPaswordData"
+            android:exported="false" />
+        <activity
             android:name=".SplashScreen.SplashScreen"
             android:exported="true">
             <intent-filter>
