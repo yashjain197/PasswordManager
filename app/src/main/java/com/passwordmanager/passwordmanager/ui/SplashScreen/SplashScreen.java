@@ -1,4 +1,4 @@
-package com.passwordmanager.passwordmanager.SplashScreen;
+package com.passwordmanager.passwordmanager.ui.SplashScreen;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
-import com.passwordmanager.passwordmanager.LoginOTPScreen.LoginOTPActivity;
+import com.passwordmanager.passwordmanager.ui.auth.LoginOTPActivity;
 import com.passwordmanager.passwordmanager.R;
 
 public class SplashScreen extends AppCompatActivity {

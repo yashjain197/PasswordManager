@@ -1,4 +1,4 @@
-package com.passwordmanager.passwordmanager.LoginOTPScreen;
+package com.passwordmanager.passwordmanager.ui.auth;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -9,7 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.passwordmanager.passwordmanager.MainScreen.MainActivity;
+import com.passwordmanager.passwordmanager.ui.PasswordDisplayScreen.MainActivity;
 import com.passwordmanager.passwordmanager.R;
 import com.passwordmanager.passwordmanager.databinding.ActivityLoginOtpBinding;
 

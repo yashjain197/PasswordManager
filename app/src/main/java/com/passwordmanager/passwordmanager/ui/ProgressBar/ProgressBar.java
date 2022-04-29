@@ -1,4 +1,4 @@
-package com.passwordmanager.passwordmanager.ProgressBar;
+package com.passwordmanager.passwordmanager.ui.ProgressBar;
 
 import android.app.Activity;
 import android.view.LayoutInflater;

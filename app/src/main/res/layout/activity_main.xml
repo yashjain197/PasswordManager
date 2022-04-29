@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grey"
-    tools:context=".MainScreen.MainActivity">
+    tools:context=".ui.PasswordDisplayScreen.MainActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -17,7 +17,6 @@
         app:layout_constraintTop_toTopOf="parent"
         android:elevation="10dp"
         ></androidx.appcompat.widget.Toolbar>
-
 
 
     <TextView
@@ -39,6 +38,7 @@
         android:fontFamily="@font/lobster_regular"
         android:text="No data available"
         android:textColor="#A9A9A9"
+        android:visibility="visible"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -54,11 +54,25 @@
         android:elevation="6dp"
         android:backgroundTint="@color/bluePurp"
         android:src="@drawable/ic_baseline_add_24"
+        app:tint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-
         app:borderWidth="0dp"
         app:layout_constraintEnd_toEndOf="parent">
 
+
     </com.google.android.material.floatingactionbutton.FloatingActionButton>
+
+<!--    <com.ramotion.circlemenu.CircleMenuView-->
+<!--        android:id="@+id/circularImage"-->
+<!--        android:layout_width="50dp"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:background="@drawable/ic_baseline_add_24"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        >-->
+
+<!--    </com.ramotion.circlemenu.CircleMenuView>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

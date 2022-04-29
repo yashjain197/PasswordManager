@@ -10,4 +10,7 @@
     <color name="grey">#19191b</color>
     <color name="bluePurp">#488AC7</color>
     <color name="hint">#D3D3D3</color>
+    <color name="red">#FF9494</color>
+    <color name="darkGrey">#a9a9a9</color>
+
 </resources>

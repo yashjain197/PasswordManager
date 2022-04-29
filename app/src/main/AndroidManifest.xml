@@ -12,10 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PasswordManager">
         <activity
-            android:name=".AddDataScreen.AddPaswordData"
+            android:name=".ui.AddPasswordScreen.AddPasswordData"
             android:exported="false" />
         <activity
-            android:name=".SplashScreen.SplashScreen"
+            android:name=".ui.SplashScreen.SplashScreen"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginOTPScreen.LoginOTPActivity"
+            android:name=".ui.auth.LoginOTPActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,7 +33,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainScreen.MainActivity"
+            android:name=".ui.PasswordDisplayScreen.MainActivity"
             android:exported="true" />
     </application>
 

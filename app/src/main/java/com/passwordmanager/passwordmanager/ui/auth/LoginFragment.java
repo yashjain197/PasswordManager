@@ -1,11 +1,18 @@
-package com.passwordmanager.passwordmanager.LoginOTPScreen;
+package com.passwordmanager.passwordmanager.ui.auth;
 
 import android.content.Context;
+import android.os.Binder;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 
+import android.renderscript.ScriptGroup;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,33 +28,33 @@ import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
-import com.passwordmanager.passwordmanager.ProgressBar.ProgressBar;
+import com.passwordmanager.passwordmanager.databinding.FragmentLoginBinding;
+import com.passwordmanager.passwordmanager.ui.ProgressBar.ProgressBar;
 import com.passwordmanager.passwordmanager.R;
 
 import java.util.concurrent.TimeUnit;
 
 import com.google.firebase.auth.PhoneAuthOptions;
+import com.passwordmanager.passwordmanager.util.ViewUtilKt;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link LoginFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LoginFragment extends Fragment {
+public class LoginFragment extends Fragment implements AuthListener{
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private Button getOtpbtn;
-    private EditText phnNumber;
-    private TextView verifyPhone;
     private Context context;
     private FirebaseAuth Auth;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     ProgressBar dialog;
+    FragmentLoginBinding binding;
 
     public LoginFragment(){}
 
@@ -86,21 +93,24 @@ public class LoginFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view=inflater.inflate(R.layout.fragment_login, container, false);
-        getOtpbtn=view.findViewById(R.id.getOtpBtn);
-        verifyPhone=view.findViewById(R.id.verifyPhone);
-        phnNumber=view.findViewById(R.id.phoneNumber);
+        binding=DataBindingUtil.inflate(inflater,R.layout.fragment_login,container,false);
+        View view=binding.getRoot();
+        AuthViewModel viewModelProviders= ViewModelProviders.of(getActivity()).get(AuthViewModel.class);
+        binding.setViewModel(viewModelProviders);
+        viewModelProviders.authListener=this;
+
         dialog=new ProgressBar(getActivity());
+
         //initialize the app
         FirebaseApp.initializeApp(context);
         Auth = FirebaseAuth.getInstance();
 
         //If current uer is already logged in we don't need this Activity to run.
-        getOtpbtn.setOnClickListener(view1 -> {
+        binding.getOtpBtn.setOnClickListener(view1 -> {
             verifyPhoneNumber(Auth);
 
         });
-        YoYo.with(Techniques.Bounce).duration(2000).repeat(50).playOn(verifyPhone);
+        YoYo.with(Techniques.Bounce).duration(2000).repeat(50).playOn(binding.verifyPhone);
 
         return view;
     }
@@ -115,11 +125,11 @@ public class LoginFragment extends Fragment {
     //To verify phone number from firebase we use this function.
     public void verifyPhoneNumber(FirebaseAuth auth){
 
-        if(!phnNumber.getText().toString().isEmpty()){
-            if((phnNumber.getText().toString().trim()).length()==10){
+        if(!binding.phoneNumber.getText().toString().isEmpty()){
+            if((binding.phoneNumber.getText().toString().trim()).length()==10){
                 dialog.startLoadingDialog();
                 PhoneAuthOptions options=PhoneAuthOptions.newBuilder(auth)
-                        .setPhoneNumber("+91"+phnNumber.getText().toString())
+                        .setPhoneNumber("+91"+binding.phoneNumber.getText().toString())
                         .setTimeout(60L, TimeUnit.SECONDS)
                         .setActivity(getActivity())
                         .setCallbacks(new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
@@ -139,7 +149,7 @@ public class LoginFragment extends Fragment {
                                 Bundle bundle=new Bundle();
                                 bundle.putString("OTP",verifyId);
                                 dialog.dismissDialog();
-                                bundle.putString("PhoneNumber",phnNumber.getText().toString());
+                                bundle.putString("PhoneNumber",binding.phoneNumber.getText().toString());
                                 OTPFragment otpFragment=new OTPFragment(context);
                                 otpFragment.setArguments(bundle);
                                 goToNextFragment(otpFragment);
@@ -153,6 +163,23 @@ public class LoginFragment extends Fragment {
         }else{
             Toast.makeText(context,"Enter a valid phoneNumber",Toast.LENGTH_SHORT).show();
         }
+
+    }
+
+    @Override
+    public void onStarted() {
+        ViewUtilKt.toast(context,"Login Started");
+    }
+
+    @Override
+    public void onSuccess() {
+        ViewUtilKt.toast(context,"Login Success");
+
+    }
+
+    @Override
+    public void onFailure(String message) {
+        ViewUtilKt.toast(context,message);
 
     }
 }

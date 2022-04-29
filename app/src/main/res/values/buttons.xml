@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="icons">
+        <item>@drawable/add</item>
+        <item>@drawable/key</item>
+        <item>@drawable/gear</item>
+        <item>@drawable/support</item>
+
+    </array>
+
+    <array name="colors">
+        <item>@color/bluePurp</item>
+        <item>#228B22</item>
+        <item>@color/red</item>
+        <item>#BF40BF</item>
+    </array>
+
+
+</resources>
