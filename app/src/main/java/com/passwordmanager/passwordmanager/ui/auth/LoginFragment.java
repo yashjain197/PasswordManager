@@ -105,7 +105,7 @@ public class LoginFragment extends Fragment implements AuthListener{
         FirebaseApp.initializeApp(context);
         Auth = FirebaseAuth.getInstance();
 
-        //If current uer is already logged in we don't need this Activity to run.
+        //If current user is already logged in we don't need this Activity to run.
         binding.getOtpBtn.setOnClickListener(view1 -> {
             verifyPhoneNumber(Auth);
 

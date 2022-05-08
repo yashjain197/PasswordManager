@@ -28,7 +28,6 @@ public class AuthViewModel extends ViewModel {
             authListener.onFailure("Please enter a valid phone number");
         return;
         }
-
         authListener.onSuccess();
         //Success
 
