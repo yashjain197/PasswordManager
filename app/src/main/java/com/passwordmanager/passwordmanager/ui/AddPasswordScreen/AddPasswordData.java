@@ -14,17 +14,26 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.passwordmanager.passwordmanager.R;
+import com.passwordmanager.passwordmanager.data.RoomDB;
+import com.passwordmanager.passwordmanager.data.passwordLocalDB;
 import com.passwordmanager.passwordmanager.databinding.ActivityAddPaswordDataBinding;
+import com.passwordmanager.passwordmanager.ui.PasswordDisplayScreen.MainActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddPasswordData extends AppCompatActivity {
     ActivityAddPaswordDataBinding binding;
     Dialog dialog;
+    List<passwordLocalDB> dataList=new ArrayList<>();
+    RoomDB database;
     private boolean isClickable=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding=ActivityAddPaswordDataBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
         binding.backBtn.setOnClickListener(view -> {
             if(!binding.name.getText().toString().isEmpty() || !binding.username.getText().toString().isEmpty() || !binding.password.getText().toString().isEmpty() || !binding.description.getText().toString().isEmpty() ){
                 showDialog();
@@ -51,6 +60,38 @@ public class AddPasswordData extends AppCompatActivity {
                         binding.saveBtn.setBackgroundResource(R.drawable.unselected_btn);
                         isClickable=false;
                     }
+                    if(binding.name.getText().toString().isEmpty()){
+                    binding.saveBtn.setBackgroundResource(R.drawable.unselected_btn);
+                    isClickable=false;
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        binding.name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(!binding.name.getText().toString().isEmpty()) {
+                    binding.saveBtn.setBackgroundResource(R.drawable.textbox_outline);
+                    isClickable=true;
+                }
+                if(binding.password.getText().toString().isEmpty()){
+                    binding.saveBtn.setBackgroundResource(R.drawable.unselected_btn);
+                    isClickable=false;
+                }
+                if(binding.username.getText().toString().isEmpty()){
+                    binding.saveBtn.setBackgroundResource(R.drawable.unselected_btn);
+                    isClickable=false;
+                }
             }
 
             @Override
@@ -75,6 +116,10 @@ public class AddPasswordData extends AppCompatActivity {
                     binding.saveBtn.setBackgroundResource(R.drawable.unselected_btn);
                     isClickable=false;
                 }
+                if(binding.name.getText().toString().isEmpty()){
+                    binding.saveBtn.setBackgroundResource(R.drawable.unselected_btn);
+                    isClickable=false;
+                }
             }
 
             @Override
@@ -90,9 +135,25 @@ public class AddPasswordData extends AppCompatActivity {
                 }
                 if(binding.password.getText().toString().isEmpty()){
                     binding.password.setError("Required");
-                }else{
-                    Toast.makeText(this,"Saved",Toast.LENGTH_SHORT).show();
                 }
+            }else{
+                database= RoomDB.getInstance(this);
+                passwordLocalDB data=new passwordLocalDB();
+                data.setName(binding.name.getText().toString().trim());
+                data.setUsername(binding.username.getText().toString().trim());
+                data.setPassword(binding.password.getText().toString().trim());
+
+                if(!binding.description.getText().toString().trim().isEmpty()){
+                    data.setDescription(binding.description.getText().toString().trim());
+                }else{
+                    data.setDescription("N/A");
+                }
+                database.passwordDao().insert(data);
+                Toast.makeText(this,"Saved",Toast.LENGTH_SHORT).show();
+                MainActivity.dataList.clear();
+                MainActivity.dataList.addAll(database.passwordDao().getAll());
+                MainActivity.adapter.notifyDataSetChanged();
+                AddPasswordData.this.finish();
             }
         });
     }
@@ -120,5 +181,15 @@ public class AddPasswordData extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+        if (!binding.name.getText().toString().isEmpty() || !binding.username.getText().toString().isEmpty() || !binding.password.getText().toString().isEmpty() || !binding.description.getText().toString().isEmpty()) {
+            showDialog();
+        }else{
+            super.onBackPressed();
+        }
     }
 }

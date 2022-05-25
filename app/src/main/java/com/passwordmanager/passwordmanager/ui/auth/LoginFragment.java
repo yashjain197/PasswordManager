@@ -95,9 +95,7 @@ public class LoginFragment extends Fragment implements AuthListener{
         // Inflate the layout for this fragment
         binding=DataBindingUtil.inflate(inflater,R.layout.fragment_login,container,false);
         View view=binding.getRoot();
-        AuthViewModel viewModelProviders= ViewModelProviders.of(getActivity()).get(AuthViewModel.class);
-        binding.setViewModel(viewModelProviders);
-        viewModelProviders.authListener=this;
+
 
         dialog=new ProgressBar(getActivity());
 

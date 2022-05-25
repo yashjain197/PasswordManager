@@ -1,17 +1,32 @@
 package com.passwordmanager.passwordmanager.ui.PasswordDisplayScreen;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.room.Room;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.View;
+import android.widget.LinearLayout;
 
+import com.passwordmanager.passwordmanager.adapter.passwordDataAdapter;
+import com.passwordmanager.passwordmanager.data.RoomDB;
+import com.passwordmanager.passwordmanager.data.passwordLocalDB;
 import com.passwordmanager.passwordmanager.ui.AddPasswordScreen.AddPasswordData;
 import com.passwordmanager.passwordmanager.databinding.ActivityMainBinding;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
     private String TAG="MainActivity";
+    private GridLayoutManager layoutManager;
+    RoomDB database;
+    public static List<passwordLocalDB> dataList;
+    public static passwordDataAdapter adapter;
     private GestureDetector gestureDetector;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,12 +43,30 @@ public class MainActivity extends AppCompatActivity {
 
         gestureDetector= new GestureDetector(this,new GestureListener());
 
+        //initialize database
+        database= RoomDB.getInstance(this);
+
+        //Storing database value in database
+        dataList=new ArrayList<>();
+        dataList.clear();
+        dataList=database.passwordDao().getAll();
+        if(!dataList.isEmpty()) binding.noData.setVisibility(View.GONE);
+//        dataList.addAll(database.passwordDao().getAll());
+
+        //SettingUp adapter
+        if(!dataList.isEmpty())
+        adapter=new passwordDataAdapter(this,dataList);
+
+//        setting layout manager
+        layoutManager=new GridLayoutManager(this,2,GridLayoutManager.VERTICAL,false);
+
+        binding.recyclerView.setLayoutManager(layoutManager);
+        binding.recyclerView.setAdapter(adapter);
+
 
     }
 
     private class GestureListener extends GestureDetector.SimpleOnGestureListener {
-
-
         private static final int SWIPE_THRESHOLD = 100;
         private static final int SWIPE_VELOCITY_THRESHOLD = 100;
 
