@@ -27,6 +27,12 @@ public class passwordLocalDB implements Serializable {
     @ColumnInfo(name = "description")
     private String description;
 
+    @ColumnInfo(name ="customColor")
+    private int customColor;
+
+    @ColumnInfo(name = "isVerification")
+    private boolean isVerification;
+
     public int getID() {
         return ID;
     }
@@ -65,5 +71,21 @@ public class passwordLocalDB implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getCustomColor() {
+        return customColor;
+    }
+
+    public void setCustomColor(int customColor) {
+        this.customColor = customColor;
+    }
+
+    public boolean isVerification() {
+        return isVerification;
+    }
+
+    public void setVerification(boolean verification) {
+        isVerification = verification;
     }
 }

@@ -1,9 +1,13 @@
 package com.passwordmanager.passwordmanager.ui.AddPasswordScreen;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
+import android.graphics.Color;
+import android.hardware.biometrics.BiometricManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -11,6 +15,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import com.passwordmanager.passwordmanager.R;
@@ -21,12 +26,16 @@ import com.passwordmanager.passwordmanager.ui.PasswordDisplayScreen.MainActivity
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
+import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class AddPasswordData extends AppCompatActivity {
     ActivityAddPaswordDataBinding binding;
     Dialog dialog;
-    List<passwordLocalDB> dataList=new ArrayList<>();
     RoomDB database;
+    private boolean isVerification = false;
+    int backgroundColor=-1;
     private boolean isClickable=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +93,11 @@ public class AddPasswordData extends AppCompatActivity {
                     binding.saveBtn.setBackgroundResource(R.drawable.textbox_outline);
                     isClickable=true;
                 }
+
+                if(binding.name.getText().toString().isEmpty()){
+                    binding.saveBtn.setBackgroundResource(R.drawable.unselected_btn);
+                    isClickable=false;
+                }
                 if(binding.password.getText().toString().isEmpty()){
                     binding.saveBtn.setBackgroundResource(R.drawable.unselected_btn);
                     isClickable=false;
@@ -137,28 +151,47 @@ public class AddPasswordData extends AppCompatActivity {
                     binding.password.setError("Required");
                 }
             }else{
-                database= RoomDB.getInstance(this);
-                passwordLocalDB data=new passwordLocalDB();
-                data.setName(binding.name.getText().toString().trim());
-                data.setUsername(binding.username.getText().toString().trim());
-                data.setPassword(binding.password.getText().toString().trim());
+                saveDataToRoom();
+            }
+        });
 
-                if(!binding.description.getText().toString().trim().isEmpty()){
-                    data.setDescription(binding.description.getText().toString().trim());
+        binding.colorSelectButton.setOnClickListener(view -> {
+            showColorPickerDialog()       ;
+        });
+
+        binding.encryptedOrNot.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b){
+                    //Enabled
+                    isVerification=true;
                 }else{
-                    data.setDescription("N/A");
+                //Disabled
+                    isVerification=false;
                 }
-                database.passwordDao().insert(data);
-                Toast.makeText(this,"Saved",Toast.LENGTH_SHORT).show();
-                MainActivity.dataList.clear();
-                MainActivity.dataList.addAll(database.passwordDao().getAll());
-                MainActivity.adapter.notifyDataSetChanged();
-                AddPasswordData.this.finish();
             }
         });
     }
 
+    private void showColorPickerDialog() {
+        int color= ContextCompat.getColor(this,R.color.bluePurp);
+        AmbilWarnaDialog ambilWarnaDialog=new AmbilWarnaDialog(this, color, new AmbilWarnaDialog.OnAmbilWarnaListener() {
+            @Override
+            public void onCancel(AmbilWarnaDialog dialog) {
 
+            }
+
+            @Override
+            public void onOk(AmbilWarnaDialog dialog, int color) {
+                backgroundColor=color;
+                binding.colorSelectButton.setBackgroundColor(backgroundColor);
+            }
+        });
+        ambilWarnaDialog.show();
+    }
+
+
+    //Alert Dialog for unsaved changes
     public void showDialog(){
         dialog=new Dialog(this);
         dialog.setContentView(R.layout.custom_alert_dialog_box);
@@ -191,5 +224,40 @@ public class AddPasswordData extends AppCompatActivity {
         }else{
             super.onBackPressed();
         }
+    }
+
+    public int getRandomColorCode(){
+        Random random = new Random();
+        return Color.argb(255, random.nextInt(256), random.nextInt(256),random.nextInt(256));
+
+    }
+
+    public void saveDataToRoom(){
+        database= RoomDB.getInstance(this);
+        passwordLocalDB data=new passwordLocalDB();
+        data.setName(binding.name.getText().toString().trim());
+        data.setUsername(binding.username.getText().toString().trim());
+        data.setPassword(binding.password.getText().toString().trim());
+
+        if(!binding.description.getText().toString().trim().isEmpty()){
+            data.setDescription(binding.description.getText().toString().trim());
+        }else{
+            data.setDescription("N/A");
+        }
+
+        data.setVerification(isVerification);
+
+        if(backgroundColor==-1){
+            backgroundColor=getRandomColorCode();
+        }
+
+        data.setCustomColor(backgroundColor);
+
+        database.passwordDao().insert(data);
+        Toast.makeText(this,"Saved",Toast.LENGTH_SHORT).show();
+        MainActivity.dataList.clear();
+        MainActivity.dataList.addAll(database.passwordDao().getAll());
+        MainActivity.adapter.notifyDataSetChanged();
+        AddPasswordData.this.finish();
     }
 }

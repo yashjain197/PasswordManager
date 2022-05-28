@@ -33,5 +33,8 @@
         <item name="android:background">@drawable/unselected_btn</item>
     </style>
 
+    <style name="Switch">
+            <item name="colorControlActivated">@color/bluePurp</item>
+    </style>
 
 </resources>

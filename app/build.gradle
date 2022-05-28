@@ -73,4 +73,12 @@ dependencies {
     implementation "androidx.core:core-ktx:+"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
 
+    //color picker dialog
+    implementation 'com.github.yukuku:ambilwarna:2.0.1'
+
+    //biometric
+    implementation "androidx.biometric:biometric:1.1.0"
+
+
+
 }

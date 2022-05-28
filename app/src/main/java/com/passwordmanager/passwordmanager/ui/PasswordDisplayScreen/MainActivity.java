@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.room.Room;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -64,6 +65,26 @@ public class MainActivity extends AppCompatActivity {
         binding.recyclerView.setAdapter(adapter);
 
 
+        binding.swipeRefreshLayout.setOnRefreshListener(() -> {
+            binding.swipeRefreshLayout.setRefreshing(false);
+            dataList=database.passwordDao().getAll();
+            if(!dataList.isEmpty()) binding.noData.setVisibility(View.GONE);
+//        dataList.addAll(database.passwordDao().getAll());
+
+            //SettingUp adapter
+            if(!dataList.isEmpty())
+                adapter=new passwordDataAdapter(this,dataList);
+
+//        setting layout manager
+            layoutManager=new GridLayoutManager(this,2,GridLayoutManager.VERTICAL,false);
+
+            binding.recyclerView.setLayoutManager(layoutManager);
+            binding.recyclerView.setAdapter(adapter);
+
+        });
+
+
+
     }
 
     private class GestureListener extends GestureDetector.SimpleOnGestureListener {
@@ -121,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void onSwipeBottom() {
     }
+
 
 
 }

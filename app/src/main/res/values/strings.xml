@@ -8,4 +8,8 @@
     <string name="password">Password</string>
     <string name="password_manager">Password Manager</string>
     <string name="backimage">BackImage</string>
+    <string name="noDescriptionAvsailabel">Description is not available</string>
+    <string name="save">Save</string>
+    <string name="hide">Hide</string>
+    <string name="show">show</string>
 </resources>

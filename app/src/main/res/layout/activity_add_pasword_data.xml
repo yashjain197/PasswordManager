@@ -69,83 +69,87 @@
         app:layout_constraintTop_toTopOf="@+id/toolbar">
 
     </androidx.appcompat.widget.AppCompatButton>
+
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_marginTop="30dp"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/PasswordDataLayout"
-            android:theme="@style/PasswordDataLayout"
             android:id="@+id/textInputLayout"
+            style="@style/PasswordDataLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
             android:layout_gravity="center"
+            android:layout_margin="20dp"
             android:hint="name"
             android:textColorHint="@color/hint"
+            android:theme="@style/PasswordDataLayout"
+            app:hintTextAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintStart_toStartOf="parent"
             app:startIconDrawable="@drawable/name_hint_icon"
-            app:startIconTint="@color/hint"
-            >
+            app:startIconTint="@color/hint">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColorHint="@color/hint"
-                />
+                android:textColorHint="@color/hint" />
         </com.google.android.material.textfield.TextInputLayout>
 
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/PasswordDataLayout"
-            android:theme="@style/PasswordDataLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="20dp"
-            android:layout_gravity="center"
             android:hint="username / phone / email"
             android:textColorHint="@color/hint"
+            android:theme="@style/PasswordDataLayout"
+            app:hintTextAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintStart_toStartOf="parent"
             app:startIconDrawable="@drawable/username_hint_icon"
-            app:startIconTint="@color/hint"
-            >
+            app:startIconTint="@color/hint">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColorHint="@color/hint"
-                />
+                android:textColorHint="@color/hint" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/PasswordDataLayout"
-            android:theme="@style/PasswordDataLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="20dp"
-            android:layout_gravity="center"
             android:hint="password"
             android:textColorHint="@color/hint"
+            android:theme="@style/PasswordDataLayout"
+            app:hintTextAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintStart_toStartOf="parent"
+            app:passwordToggleEnabled="true"
             app:startIconDrawable="@drawable/pasword_hint_icon"
-            app:startIconTint="@color/hint"
-            >
+            app:startIconTint="@color/hint">
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColorHint="@color/hint"
                 android:inputType="textPassword"
+                android:textColorHint="@color/hint"
 
                 />
         </com.google.android.material.textfield.TextInputLayout>
@@ -153,33 +157,73 @@
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/PasswordDataLayout"
-            android:theme="@style/PasswordDataLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="20dp"
-            android:layout_gravity="center"
             android:hint="description"
             android:textColorHint="@color/hint"
+            android:theme="@style/PasswordDataLayout"
             app:counterEnabled="true"
             app:counterMaxLength="100"
+            app:hintTextAppearance="@style/TextAppearance.AppCompat.Medium"
 
             app:layout_constraintStart_toStartOf="parent"
             app:startIconDrawable="@drawable/description_hint_icon"
             app:startIconTint="@color/hint"
 
             >
+
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/description"
                 android:layout_width="match_parent"
-                android:maxLength="100"
                 android:layout_height="200dp"
-                android:textColorHint="@color/hint"
-                />
+                android:maxLength="100"
+                android:textColorHint="@color/hint" />
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/textView4"
+        style="@style/hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:text="Select custom color"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
+    <Button
+        android:id="@+id/colorSelectButton"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="@+id/textView4"
+        app:layout_constraintStart_toStartOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <TextView
+        android:id="@+id/textView5"
+        style="@style/hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:text="Add verification"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <Switch
+        android:id="@+id/encryptedOrNot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        style="@style/Switch"
+        app:layout_constraintEnd_toEndOf="@+id/textView5"
+        app:layout_constraintStart_toStartOf="@+id/textView5"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

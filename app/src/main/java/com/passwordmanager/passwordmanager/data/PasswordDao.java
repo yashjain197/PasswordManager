@@ -29,6 +29,12 @@ public interface PasswordDao {
     @Query("UPDATE user_password SET username= :sUsername WHERE ID= :sID")
     void updateUsername(int sID,String sUsername);
 
+    @Query("UPDATE user_password SET password= :sPassword WHERE ID= :sID")
+    void updatePassword(int sID,String sPassword);
+
+    @Query("UPDATE user_password SET description= :sDescription WHERE ID= :sID")
+    void updateDescription(int sID,String sDescription);
+
     //get all data from table
     @Query("SELECT * FROM user_password")
     List<passwordLocalDB> getAll();
