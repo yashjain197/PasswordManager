@@ -8,6 +8,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.hardware.biometrics.BiometricManager;
+import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -24,7 +25,9 @@ import com.passwordmanager.passwordmanager.data.passwordLocalDB;
 import com.passwordmanager.passwordmanager.databinding.ActivityAddPaswordDataBinding;
 import com.passwordmanager.passwordmanager.ui.PasswordDisplayScreen.MainActivity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
@@ -159,18 +162,39 @@ public class AddPasswordData extends AppCompatActivity {
             showColorPickerDialog()       ;
         });
 
+        biometricCheck();
         binding.encryptedOrNot.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if(b){
                     //Enabled
                     isVerification=true;
+                    biometricCheck();
                 }else{
                 //Disabled
                     isVerification=false;
                 }
             }
         });
+    }
+
+    private void biometricCheck() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            //Fingerprint API only available on from Android 6.0 (M)
+            FingerprintManager fingerprintManager = (FingerprintManager) AddPasswordData.this.getSystemService(Context.FINGERPRINT_SERVICE);
+            if (!fingerprintManager.isHardwareDetected()) {
+                // Device doesn't support fingerprint authentication
+                binding.verificationSwitch.setVisibility(View.GONE);
+            } else if (!fingerprintManager.hasEnrolledFingerprints()) {
+                // User hasn't enrolled any fingerprints to authenticate with
+                binding.encryptedOrNot.setChecked(false);
+                Toast.makeText(this, "Please register fingerPrint first", Toast.LENGTH_SHORT).show();
+            } else {
+                // Everything is ready for fingerprint authentication
+            }
+        }else{
+            binding.verificationSwitch.setVisibility(View.GONE);
+        }
     }
 
     private void showColorPickerDialog() {
@@ -250,6 +274,8 @@ public class AddPasswordData extends AppCompatActivity {
         if(backgroundColor==-1){
             backgroundColor=getRandomColorCode();
         }
+        String time=getCurrentTime();
+        data.setLastEdited(time);
 
         data.setCustomColor(backgroundColor);
 
@@ -259,5 +285,12 @@ public class AddPasswordData extends AppCompatActivity {
         MainActivity.dataList.addAll(database.passwordDao().getAll());
         MainActivity.adapter.notifyDataSetChanged();
         AddPasswordData.this.finish();
+    }
+
+    private String getCurrentTime() {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd LLL yyyy, KK:mm aaa");
+        String dateTime = simpleDateFormat.format(calendar.getTime()).toString();
+        return dateTime;
     }
 }

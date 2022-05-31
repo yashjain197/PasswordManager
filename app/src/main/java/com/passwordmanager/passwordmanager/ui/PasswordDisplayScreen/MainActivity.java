@@ -1,17 +1,24 @@
 package com.passwordmanager.passwordmanager.ui.PasswordDisplayScreen;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.renderscript.ScriptGroup;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.passwordmanager.passwordmanager.adapter.passwordDataAdapter;
 import com.passwordmanager.passwordmanager.data.RoomDB;
@@ -21,6 +28,7 @@ import com.passwordmanager.passwordmanager.databinding.ActivityMainBinding;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private String TAG="MainActivity";
@@ -29,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     public static List<passwordLocalDB> dataList;
     public static passwordDataAdapter adapter;
     private GestureDetector gestureDetector;
+    SwipeRefreshLayout swipeRefreshLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ActivityMainBinding binding;
@@ -83,7 +92,55 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
 
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                    database.passwordDao().delete(adapter.getPasswordAt(viewHolder.getAdapterPosition()));
+
+                    dataList.clear();
+                    dataList=database.passwordDao().getAll();
+                    if(dataList.isEmpty()) binding.noData.setVisibility(View.VISIBLE);
+                    adapter=new passwordDataAdapter(MainActivity.this,dataList);
+                    binding.recyclerView.setAdapter(adapter);
+
+
+            }
+
+        }).attachToRecyclerView(binding.recyclerView);
+        binding.search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                filterPasswordName(editable.toString());
+            }
+        });
+    }
+
+    private void filterPasswordName(String name) {
+    ArrayList<passwordLocalDB> searchList=new ArrayList<>();
+
+    if(!dataList.isEmpty()) {
+        for (passwordLocalDB item : dataList) {
+            if (item.getName().toLowerCase().contains(name.toLowerCase())) {
+                searchList.add(item);
+            }
+        }
+        adapter.filteredList(searchList);
+    }
 
     }
 
@@ -142,7 +199,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void onSwipeBottom() {
     }
-
 
 
 }

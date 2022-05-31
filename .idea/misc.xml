@@ -5,6 +5,7 @@
       <map>
         <entry key="app/src/main/res/drawable/background.xml" value="0.1875" />
         <entry key="app/src/main/res/drawable/box_stroke_color.xml" value="0.1875" />
+        <entry key="app/src/main/res/drawable/cursor_color.xml" value="0.15" />
         <entry key="app/src/main/res/drawable/custom_alert_dialog_design.xml" value="0.1875" />
         <entry key="app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.1875" />
         <entry key="app/src/main/res/drawable/ic_baseline_security_24.xml" value="0.1875" />
@@ -12,6 +13,7 @@
         <entry key="app/src/main/res/drawable/outline_admin_panel_settings_20.xml" value="0.1875" />
         <entry key="app/src/main/res/drawable/outline_admin_panel_settings_24.xml" value="0.1875" />
         <entry key="app/src/main/res/drawable/round_btn.xml" value="0.15" />
+        <entry key="app/src/main/res/drawable/round_edit_text.xml" value="0.15" />
         <entry key="app/src/main/res/drawable/splash_background.xml" value="0.1875" />
         <entry key="app/src/main/res/drawable/textbox_outline.xml" value="0.1875" />
         <entry key="app/src/main/res/drawable/unselected_btn.xml" value="0.1875" />
@@ -19,7 +21,7 @@
         <entry key="app/src/main/res/layout/activity_add_pasword_data.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_login_otp.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_progress_bar.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_splash_screen.xml" value="0.16" />
         <entry key="app/src/main/res/layout/custom_alert_dialog_box.xml" value="0.33" />
@@ -27,7 +29,7 @@
         <entry key="app/src/main/res/layout/fragment_login.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_otp.xml" value="0.25" />
         <entry key="app/src/main/res/layout/login_fragment.xml" value="0.2" />
-        <entry key="app/src/main/res/layout/password_display_dialog.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/password_display_dialog.xml" value="0.33" />
         <entry key="app/src/main/res/layout/password_layout.xml" value="0.33" />
         <entry key="app/src/main/res/menu/top_menu.xml" value="0.33" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1875" />

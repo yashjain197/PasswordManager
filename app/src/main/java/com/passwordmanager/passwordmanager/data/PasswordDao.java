@@ -35,6 +35,15 @@ public interface PasswordDao {
     @Query("UPDATE user_password SET description= :sDescription WHERE ID= :sID")
     void updateDescription(int sID,String sDescription);
 
+    @Query("UPDATE user_password SET customColor= :sCustomColor WHERE ID= :sID")
+    void updateCustomColor(int sID,int sCustomColor);
+
+    @Query("UPDATE user_password SET isVerification= :sIsVerificationOn WHERE ID= :sID")
+    void updateIsVerificationOn(int sID,boolean sIsVerificationOn);
+
+    @Query("UPDATE user_password SET lastEdited= :time WHERE ID= :sID")
+    void updateLastEditedTime(int sID,String time);
+
     //get all data from table
     @Query("SELECT * FROM user_password")
     List<passwordLocalDB> getAll();

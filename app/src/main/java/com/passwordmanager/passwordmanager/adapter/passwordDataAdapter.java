@@ -7,6 +7,8 @@ package com.passwordmanager.passwordmanager.adapter;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
+import android.hardware.fingerprint.FingerprintManager;
 import android.os.Build;
 import android.text.InputType;
 import android.text.method.HideReturnsTransformationMethod;
@@ -18,6 +20,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +28,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.biometric.BiometricPrompt;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,13 +36,23 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.passwordmanager.passwordmanager.R;
 import com.passwordmanager.passwordmanager.data.RoomDB;
 import com.passwordmanager.passwordmanager.data.passwordLocalDB;
+
+import org.w3c.dom.Text;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.Executor;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import yuku.ambilwarna.AmbilWarnaDialog;
 
 public class passwordDataAdapter extends RecyclerView.Adapter<passwordDataAdapter.ViewHolder> {
     private List<passwordLocalDB> data_list;
     private final Activity context;
     private RoomDB database;
+    private int backgroundColor=-1;
 
     public passwordDataAdapter(Activity context,List<passwordLocalDB> data_list){
         this.context=context;
@@ -64,8 +78,9 @@ public class passwordDataAdapter extends RecyclerView.Adapter<passwordDataAdapte
 
         database=RoomDB.getInstance(context);
 
+
         holder.cardView.setOnClickListener(view -> {
-            if(passwordLocalDB.isVerification()){
+            if(passwordLocalDB.isVerification() && biometricCheck()){
                 showBiometric(position);
             }else {
                 //create dialog
@@ -96,7 +111,7 @@ public class passwordDataAdapter extends RecyclerView.Adapter<passwordDataAdapte
 
         BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
                 .setTitle("User Authentication")
-                .setSubtitle("Login using fingerprint or face")
+                .setSubtitle("Login using fingerprint")
                 .setNegativeButtonText("Cancel")
                 .build();
 
@@ -116,6 +131,7 @@ public class passwordDataAdapter extends RecyclerView.Adapter<passwordDataAdapte
             super(itemView);
             cardView=itemView.findViewById(R.id.PasswordName);
             name = itemView.findViewById(R.id.name);
+
         }
     }
 
@@ -132,11 +148,30 @@ public class passwordDataAdapter extends RecyclerView.Adapter<passwordDataAdapte
         EditText description=dialog.findViewById(R.id.description);
         TextView showHide=dialog.findViewById(R.id.showHideText);
         ImageView back=dialog.findViewById(R.id.backBtn);
+        TextView time=dialog.findViewById(R.id.time);
         Button EditBtn=dialog.findViewById(R.id.editBtn);
+        ConstraintLayout switchLayout=dialog.findViewById(R.id.verificationSwitch);
+        ConstraintLayout colorLayout=dialog.findViewById(R.id.colorLayout);
+        Button colorSelectButton=dialog.findViewById(R.id.colorSelectButton);
+        Switch authentication=dialog.findViewById(R.id.encryptedOrNot);
+        //checking if biometric is available
+        if(!biometricCheck()){
+            switchLayout.setVisibility(View.GONE);
+        }
+
         passwordLocalDB d=data_list.get(position);
+        colorSelectButton.setBackgroundColor(d.getCustomColor());
+        backgroundColor=d.getCustomColor();
+        AtomicBoolean isVerification= new AtomicBoolean(false);
+        if(d.isVerification()){
+            isVerification.set(true);
+            authentication.setChecked(true);
+        }
+
         name.setText(d.getName());
         username.setText(d.getUsername());
         password.setText(d.getPassword());
+        time.setText(d.getLastEdited());
         if(d.getDescription().equals("N/A")){
             description.setText(R.string.noDescriptionAvsailabel);
         }else{
@@ -159,6 +194,11 @@ public class passwordDataAdapter extends RecyclerView.Adapter<passwordDataAdapte
 
                 description.setEnabled(true);
                 description.setFocusable(true);
+
+                if(biometricCheck()){
+                    switchLayout.setVisibility(View.VISIBLE);
+                }
+                colorLayout.setVisibility(View.VISIBLE);
 
                 EditBtn.setText(R.string.save);
             }else{
@@ -183,7 +223,21 @@ public class passwordDataAdapter extends RecyclerView.Adapter<passwordDataAdapte
                     isChanged=true;
                 }
 
+                if(backgroundColor!=d.getCustomColor()){
+                    database.passwordDao().updateCustomColor(d.getID(),backgroundColor);
+                    isChanged=true;
+                }
+
+                if(isVerification.get()!=d.isVerification()){
+                    database.passwordDao().updateIsVerificationOn(d.getID(),isVerification.get());
+                    isChanged=true;
+                }
+
+
+
                 if(isChanged){
+                    String currTime=getCurrentTime();
+                    database.passwordDao().updateLastEditedTime(d.getID(),currTime);
                     data_list=database.passwordDao().getAll();
                     dialog.dismiss();
                     Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show();
@@ -203,6 +257,71 @@ public class passwordDataAdapter extends RecyclerView.Adapter<passwordDataAdapte
                 showHide.setText(R.string.show);
             }
         });
+
+        authentication.setOnCheckedChangeListener((compoundButton, b) -> {
+            if(b){
+                isVerification.set(true);
+            }else{
+                isVerification.set(false);
+            }
+        });
+
+        colorSelectButton.setOnClickListener(view -> {
+           showColorPickerDialog(colorSelectButton);
+        });
+
+    }
+    public passwordLocalDB getPasswordAt(int position){
+        return data_list.get(position);
+    }
+
+    private boolean biometricCheck() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            //Fingerprint API only available on from Android 6.0 (M)
+            FingerprintManager fingerprintManager = (FingerprintManager) context.getSystemService(Context.FINGERPRINT_SERVICE);
+            if (!fingerprintManager.isHardwareDetected()) {
+                // Device doesn't support fingerprint authentication
+                return false;
+            } else if (!fingerprintManager.hasEnrolledFingerprints()) {
+                // User hasn't enrolled any fingerprints to authenticate with
+                return false;
+            } else {
+                // Everything is ready for fingerprint authentication
+                return true;
+            }
+        }else{
+            return false;
+        }
+    }
+
+    private int showColorPickerDialog(Button colorBtn) {
+        int color= ContextCompat.getColor(context,R.color.bluePurp);
+        AmbilWarnaDialog ambilWarnaDialog=new AmbilWarnaDialog(context, color, new AmbilWarnaDialog.OnAmbilWarnaListener() {
+            @Override
+            public void onCancel(AmbilWarnaDialog dialog) {
+
+            }
+
+            @Override
+            public void onOk(AmbilWarnaDialog dialog, int color) {
+                backgroundColor=color;
+                colorBtn.setBackgroundColor(backgroundColor);
+            }
+        });
+        ambilWarnaDialog.show();
+        return backgroundColor;
+    }
+
+    private String getCurrentTime() {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd LLL yyyy, KK:mm aaa");
+        String dateTime = simpleDateFormat.format(calendar.getTime()).toString();
+        return dateTime;
+    }
+
+    public void filteredList(ArrayList<passwordLocalDB> filteredList){
+        data_list=filteredList;
+        notifyDataSetChanged();
     }
 
 }

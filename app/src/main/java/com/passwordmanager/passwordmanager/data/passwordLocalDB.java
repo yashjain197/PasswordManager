@@ -33,6 +33,9 @@ public class passwordLocalDB implements Serializable {
     @ColumnInfo(name = "isVerification")
     private boolean isVerification;
 
+    @ColumnInfo(name="lastEdited")
+    private String lastEdited;
+
     public int getID() {
         return ID;
     }
@@ -87,5 +90,13 @@ public class passwordLocalDB implements Serializable {
 
     public void setVerification(boolean verification) {
         isVerification = verification;
+    }
+
+    public String getLastEdited() {
+        return lastEdited;
+    }
+
+    public void setLastEdited(String lastEdited) {
+        this.lastEdited = lastEdited;
     }
 }
